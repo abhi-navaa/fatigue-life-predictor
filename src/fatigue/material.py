@@ -8,6 +8,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from fatigue.exceptions import InvalidMaterialError
+
 
 @dataclass(slots=True)
 class Material:
@@ -58,27 +60,27 @@ class Material:
     endurance_limit: float | None = None
 
     fatigue_strength_coefficient: float | None = None
-    Fatigue_strenth_exponenet: float | None = None
+    fatigue_strength_exponent: float | None = None
 
     def __post_init__(self) -> None:
 
         if self.elastic_modulus <= 0:
-            raise ValueError("Elastic Modulus must be positive")
+            raise InvalidMaterialError("Elastic Modulus must be positive")
 
         if not (0.00 < self.poissons_ratio < 0.50):
-            raise ValueError("Poissons ratio must be between 0 and 0.5")
+            raise InvalidMaterialError("Poissons ratio must be between 0 and 0.5")
 
         if self.yield_strength <= 0:
-            raise ValueError("Yield strength must be positive")
+            raise InvalidMaterialError("Yield strength must be positive")
 
         if self.ultimate_strength <= 0:
-            raise ValueError(" Ultimate tensile strength must be positive")
+            raise InvalidMaterialError(" Ultimate tensile strength must be positive")
 
         if self.yield_strength > self.ultimate_strength:
-            raise ValueError("yield cannot exceed ultimate strength")
+            raise InvalidMaterialError("yield cannot exceed ultimate strength")
 
         if self.endurance_limit is not None and self.endurance_limit <= 0:
-            raise ValueError("Endurance limit must be positive")
+            raise InvalidMaterialError("Endurance limit must be positive")
 
         if self.density is not None and self.density <= 0:
-            raise ValueError("Density must be positive")
+            raise InvalidMaterialError("Density must be positive")

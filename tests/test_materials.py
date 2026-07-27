@@ -1,4 +1,20 @@
+import pytest
+
+from fatigue.exceptions import InvalidMaterialError
 from fatigue.material import Material
+
+
+def test_invalid_yield_strength():
+
+    with pytest.raises(InvalidMaterialError):
+
+        Material(
+            name="Steel",
+            elastic_modulus=210000,
+            poissons_ratio=0.30,
+            yield_strength=700,
+            ultimate_strength=600,
+        )
 
 
 def test_material_creation():
